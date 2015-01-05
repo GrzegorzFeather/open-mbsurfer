@@ -1,0 +1,18 @@
+<resources>
+
+    <style name="Theme.MBS" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimaryDark">@color/mbsPrimaryDark</item>
+        <item name="colorPrimary">@color/mbsPrimary</item>
+        <item name="colorAccent">@color/mbsAccent</item>
+        <item name="windowActionBarOverlay">true</item>
+    </style>
+
+    <style name="ThemeOverlay.MBS.ActionBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="windowActionBarOverlay">true</item>
+    </style>
+
+    <style name="ThemeOverlay.MBS.Light" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:windowActionBarOverlay">true</item>
+    </style>
+
+</resources>
