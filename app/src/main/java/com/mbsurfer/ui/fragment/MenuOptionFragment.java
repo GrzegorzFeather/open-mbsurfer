@@ -4,13 +4,11 @@ import com.mbsurfer.app.MBSConfiguration;
 import com.mbsurfer.ui.MenuHostActivity;
 import com.mbsurfer.ui.widget.MBSToolbar;
 
-import android.support.v4.app.Fragment;
-
 
 /**
  * Created by GrzegorzFeathers on 1/5/15.
  */
-public abstract class MenuOptionFragment extends Fragment {
+public abstract class MenuOptionFragment extends BaseFragment {
 
     private MBSConfiguration.HomeMenuOption mMenuOption;
 

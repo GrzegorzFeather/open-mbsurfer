@@ -13,7 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 
-public class HomeActivity extends MenuHostActivity {
+public class HomeActivity extends MenuHostActivity implements Toolbar.OnMenuItemClickListener {
 
     public static final String TAG = HomeActivity.class.getSimpleName();
     public static final int DEFAULT_FRAGMENT_TRANSITION = FragmentTransaction.TRANSIT_FRAGMENT_FADE;
@@ -38,12 +38,7 @@ public class HomeActivity extends MenuHostActivity {
 
         // TODO: Add menu
         //this.mToolbar.inflateMenu(R.menu.main);
-        this.mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                return onOptionsItemSelected(menuItem);
-            }
-        });
+        this.mToolbar.setOnMenuItemClickListener(this);
 
         this.mToolbar.setTitle(R.string.app_name);
         this.pushToStack(MBSConfiguration.getDefaultMenuOption().getContentClass(),
@@ -151,5 +146,10 @@ public class HomeActivity extends MenuHostActivity {
         } else {
             this.mMenuFragment.closeDrawer();
         }
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem menuItem) {
+        return this.onOptionsItemSelected(menuItem);
     }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="mbsPrimaryDark">#0288D1</color>
-    <color name="mbsPrimary">#03A9F4</color>
-    <color name="mbsAccent">#E040FB</color>
+    <color name="mbsPrimaryDark">#C2185B</color>
+    <color name="mbsPrimary">#E91E63</color>
+    <color name="mbsAccent">#448AFF</color>
 </resources>

@@ -3,4 +3,7 @@
     <declare-styleable name="TypeFacedTextView">
         <attr name="typeface" format="string"/>
     </declare-styleable>
+    <declare-styleable name="TypeFacedEditText">
+        <attr name="typeface" format="string"/>
+    </declare-styleable>
 </resources>
