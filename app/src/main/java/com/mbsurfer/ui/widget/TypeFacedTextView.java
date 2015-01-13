@@ -31,8 +31,8 @@ public class TypeFacedTextView extends TextView {
     }
 
     private void customizeTypography(Context context, AttributeSet attrs){
-        TypedArray styledAttrs = context.obtainStyledAttributes(attrs, R.styleable.TypeFacedTextView);
-        String fontName = styledAttrs.getString(R.styleable.TypeFacedTextView_typeface);
+        TypedArray styledAttrs = context.obtainStyledAttributes(attrs, R.styleable.TypeFacedView);
+        String fontName = styledAttrs.getString(R.styleable.TypeFacedView_typeface);
         styledAttrs.recycle();
 
         if(fontName != null){
