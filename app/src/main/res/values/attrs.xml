@@ -3,4 +3,12 @@
     <declare-styleable name="TypeFacedView">
         <attr name="typeface" format="string"/>
     </declare-styleable>
+    <declare-styleable name="FloatableEditText">
+        <attr name="floatEditTextAppearance" format="reference" />
+        <attr name="floatEditTextPaddingLeft" format="reference|dimension" />
+        <attr name="floatEditTextPaddingRight" format="reference|dimension" />
+        <attr name="floatEditTextPaddingTop" format="reference|dimension" />
+        <attr name="floatEditTextPaddingBottom" format="reference|dimension" />
+        <attr name="floatEditTextHint" format="reference|string" />
+    </declare-styleable>
 </resources>
