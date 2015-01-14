@@ -17,6 +17,7 @@ import com.mbsurfer.ui.widget.MBSToolbar;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -30,7 +31,7 @@ import android.view.ViewGroup;
  * Created by GrzegorzFeathers on 1/5/15.
  */
 public class MapOptionFragment extends MenuOptionFragment
-        implements GoogleMap.OnMyLocationChangeListener{
+        implements GoogleMap.OnMyLocationChangeListener, HomeMenuFragment.OnDrawerSlideListener{
 
     private View mRootView;
     private MapView mMapView;
@@ -98,6 +99,7 @@ public class MapOptionFragment extends MenuOptionFragment
     }
 
     private void recoverLocation(){
+        if(this.getActivity() == null){ return; }
         LocationManager lm = (LocationManager) this.getActivity().getSystemService(Context.LOCATION_SERVICE);
         if(lm == null){ return; }
 
@@ -116,12 +118,14 @@ public class MapOptionFragment extends MenuOptionFragment
     public void onResume() {
         super.onResume();
         this.mMapView.onResume();
+        this.getMenuHostActivity().addOnDrawerSlideListener(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
         this.mMapView.onPause();
+        this.getMenuHostActivity().removeOnDrawerSlideListener(this);
     }
 
     @Override
@@ -144,7 +148,16 @@ public class MapOptionFragment extends MenuOptionFragment
     @Override
     protected void overrideToolbarSetup(MBSToolbar toolbar) {
         super.overrideToolbarSetup(toolbar);
+        //toolbar.getToolbarComp().setBackgroundColor(this.getResources().getColor(android.R.color.transparent));
 
+        final TypedArray styledAttributes = getActivity().getTheme().obtainStyledAttributes(
+                new int[] { android.R.attr.actionBarSize });
+        int actionBarSize = (int) styledAttributes.getDimension(0, 0);
+        styledAttributes.recycle();
+
+        ViewGroup.LayoutParams layoutParams = toolbar.getToolbarComp().getLayoutParams();
+        layoutParams.height = actionBarSize;
+        toolbar.getToolbarComp().setLayoutParams(layoutParams);
     }
 
     @Override
@@ -152,4 +165,8 @@ public class MapOptionFragment extends MenuOptionFragment
 
     }
 
+    @Override
+    public void onDrawerSlide(float slideOffset) {
+
+    }
 }

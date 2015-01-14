@@ -13,7 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 
-public class HomeActivity extends MenuHostActivity implements Toolbar.OnMenuItemClickListener {
+public class HomeActivity extends HomeMenuFragment.MenuHostActivity implements Toolbar.OnMenuItemClickListener {
 
     public static final String TAG = HomeActivity.class.getSimpleName();
     public static final int DEFAULT_FRAGMENT_TRANSITION = FragmentTransaction.TRANSIT_FRAGMENT_FADE;
@@ -63,6 +63,16 @@ public class HomeActivity extends MenuHostActivity implements Toolbar.OnMenuItem
         }
 
         this.supportInvalidateOptionsMenu();
+    }
+
+    @Override
+    public void addOnDrawerSlideListener(HomeMenuFragment.OnDrawerSlideListener listener) {
+        this.mMenuFragment.addOnDrawerSlideListener(listener);
+    }
+
+    @Override
+    public void removeOnDrawerSlideListener(HomeMenuFragment.OnDrawerSlideListener listener) {
+        this.mMenuFragment.removeOnDrawerSlideListener(listener);
     }
 
     public void clearStack(){

@@ -2,14 +2,14 @@ package com.mbsurfer.ui.fragment;
 
 import com.mbsurfer.R;
 import com.mbsurfer.app.MBSConfiguration;
-import com.mbsurfer.ui.MenuHostActivity;
 import com.mbsurfer.ui.adapter.HomeMenuAdapter;
+import com.mbsurfer.ui.widget.MBSToolbar;
 
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +18,9 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -33,6 +36,12 @@ public class HomeMenuFragment extends Fragment implements View.OnClickListener {
     private RecyclerView.Adapter mRecyclerMenuOptionsAdapter;
     private RecyclerView.LayoutManager mRecyclerMenuOptionsManager;
     private ActionBarDrawerToggle mDrawerToogle;
+
+    private List<OnDrawerSlideListener> mDrawerListeners;
+
+    public HomeMenuFragment(){
+        this.mDrawerListeners = new ArrayList<>();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,7 +72,8 @@ public class HomeMenuFragment extends Fragment implements View.OnClickListener {
 
         this.mDrawerLayout = (DrawerLayout)
                 this.getMenuHostActivity().findViewById(R.id.drawer_home);
-        this.mDrawerLayout.setScrimColor(Color.parseColor("#30000000"));
+        //this.mDrawerLayout.setScrimColor(Color.parseColor("#30000000"));
+        this.mDrawerLayout.setScrimColor(this.getResources().getColor(android.R.color.transparent));
         this.mDrawerToogle = new ActionBarDrawerToggle(
                 this.getMenuHostActivity(), this.mDrawerLayout,
                 this.getMenuHostActivity().getToolbar().getToolbarComp(),
@@ -76,6 +86,14 @@ public class HomeMenuFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onDrawerClosed(View drawerView) {
                 getMenuHostActivity().supportInvalidateOptionsMenu();
+            }
+
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
+                for(OnDrawerSlideListener l : mDrawerListeners){
+                    l.onDrawerSlide(slideOffset);
+                }
             }
         };
         this.mDrawerLayout.setDrawerListener(this.mDrawerToogle);
@@ -125,5 +143,31 @@ public class HomeMenuFragment extends Fragment implements View.OnClickListener {
         if(this.isDrawerOpen()){
             this.mDrawerLayout.closeDrawer(Gravity.LEFT);
         }
+    }
+
+    public void addOnDrawerSlideListener(OnDrawerSlideListener listener){
+        this.mDrawerListeners.add(listener);
+    }
+
+    public void removeOnDrawerSlideListener(OnDrawerSlideListener listener){
+        this.mDrawerListeners.remove(listener);
+    }
+
+    public static abstract class MenuHostActivity extends ActionBarActivity {
+
+        public abstract MBSToolbar getToolbar();
+
+        public abstract void setSubtitle(int subtitleRes);
+
+        public abstract void onHomeMenuOptionSelected(MBSConfiguration.HomeMenuOption menuOption);
+
+        public abstract void addOnDrawerSlideListener(HomeMenuFragment.OnDrawerSlideListener listener);
+
+        public abstract void removeOnDrawerSlideListener(HomeMenuFragment.OnDrawerSlideListener listener);
+
+    }
+
+    public static interface OnDrawerSlideListener {
+        public void onDrawerSlide(float slideOffset);
     }
 }

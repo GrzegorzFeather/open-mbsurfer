@@ -1,9 +1,7 @@
 package com.mbsurfer.ui.fragment;
 
 import com.mbsurfer.app.MBSConfiguration;
-import com.mbsurfer.ui.MenuHostActivity;
 import com.mbsurfer.ui.widget.MBSToolbar;
-
 
 /**
  * Created by GrzegorzFeathers on 1/5/15.
@@ -23,16 +21,20 @@ public abstract class MenuOptionFragment extends BaseFragment {
         this.overrideToolbarSetup(this.getMenuHostActivity().getToolbar());
     }
 
-    protected MenuHostActivity getMenuHostActivity(){
-        MenuHostActivity menuHostActivity = null;
+    protected HomeMenuFragment.MenuHostActivity getMenuHostActivity(){
+        HomeMenuFragment.MenuHostActivity menuHostActivity = null;
 
         try {
-            menuHostActivity = (MenuHostActivity) this.getActivity();
+            menuHostActivity = (HomeMenuFragment.MenuHostActivity) this.getActivity();
         } catch (ClassCastException e) {
             throw e;
         }
 
         return menuHostActivity;
+    }
+
+    protected MBSToolbar getToolbar(){
+        return this.getMenuHostActivity().getToolbar();
     }
 
     protected void overrideToolbarSetup(MBSToolbar toolbar){}

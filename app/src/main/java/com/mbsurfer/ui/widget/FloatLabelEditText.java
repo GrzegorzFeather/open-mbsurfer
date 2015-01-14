@@ -75,7 +75,7 @@ public class FloatLabelEditText extends LinearLayout {
         this.mLabel.setPadding(leftPadding, topPadding, rightPadding, bottomPadding);
         this.mLabel.setTextAppearance(context, a.getResourceId(
                 R.styleable.FloatLabelEditText_floatEditTextAppearance,
-                android.R.style.TextAppearance_Small));
+                R.style.TextAppearance_MBS_FloatLabel));
         this.mLabel.setVisibility(INVISIBLE);
         this.mLabel.setText(this.mHintText);
 
