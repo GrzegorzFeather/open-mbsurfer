@@ -8,10 +8,13 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import com.mbsurfer.R;
 import com.mbsurfer.app.MBSConfiguration;
 import com.mbsurfer.app.menu.UserMenu;
+import com.mbsurfer.model.Line;
+import com.mbsurfer.model.Station;
 import com.mbsurfer.ui.widget.MBSToolbar;
 import com.mbsurfer.util.MBSUtils;
 
@@ -79,6 +82,18 @@ public class MyLocationOptionFragment extends MenuOptionFragment
         }
     }
 
+    private void drawLinesInMap(GoogleMap map){
+        for(Line l : Line.values()){
+            for(Station s : l.getStations()){
+                map.addMarker(new MarkerOptions()
+                        .title(s.getLine().toString())
+                        .snippet(s.getName())
+                        .position(s.getLatLng())
+                        .icon(s.getLine().getMarkerBitmapDescriptor()));
+            }
+        }
+    }
+
     private void moveMapCameraTo(Location location, boolean animate){
         if(location == null) { return; }
         CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(
@@ -116,6 +131,7 @@ public class MyLocationOptionFragment extends MenuOptionFragment
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 setupMap(googleMap);
+                drawLinesInMap(googleMap);
             }
         });
     }
