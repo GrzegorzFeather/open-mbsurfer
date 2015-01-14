@@ -2,7 +2,8 @@ package com.mbsurfer.app.menu;
 
 import com.mbsurfer.R;
 import com.mbsurfer.app.MBSConfiguration;
-import com.mbsurfer.ui.fragment.MapOptionFragment;
+import com.mbsurfer.ui.fragment.LinesMapOptionFragment;
+import com.mbsurfer.ui.fragment.MyLocationOptionFragment;
 import com.mbsurfer.ui.fragment.MenuOptionFragment;
 
 import android.support.v4.app.Fragment;
@@ -17,7 +18,8 @@ public enum UserMenu implements MBSConfiguration.HomeMenuOption {
     //EVENTS(EventsFragment.class, R.string.home_menu_events, R.drawable.ic_events, true),
     //DISCOGRAPHY(DiscographyFragment.class, R.string.home_menu_discography, R.drawable.ic_discography, true),
     //GALLERY(GalleryFragment.class, R.string.home_menu_gallery, R.drawable.ic_gallery, true);
-    MAP(MapOptionFragment.class, R.string.app_name, R.drawable.ic_launcher, true);
+    MY_LOCATION(MyLocationOptionFragment.class, R.string.home_menu_my_location, R.drawable.ic_launcher, true),
+    LINES_MAP(LinesMapOptionFragment.class, R.string.home_menu_lines_map, R.drawable.ic_launcher, true);
 
     // TODO: Rename configuration
     public static final int VISIBLE_NAME = R.string.app_name;

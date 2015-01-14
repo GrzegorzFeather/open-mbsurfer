@@ -1,6 +1,7 @@
 package com.mbsurfer.util;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.Log;
 import android.util.TypedValue;
 
@@ -46,6 +47,14 @@ public class MBSUtils {
         return (int) TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP, dps,
                 ctx.getResources().getDisplayMetrics());
+    }
+
+    public static int getActionBarSize(Context ctx){
+        final TypedArray styledAttributes = ctx.getTheme().obtainStyledAttributes(
+                new int[] { android.R.attr.actionBarSize });
+        int actionBarSize = (int) styledAttributes.getDimension(0, 0);
+        styledAttributes.recycle();
+        return actionBarSize;
     }
 
 }

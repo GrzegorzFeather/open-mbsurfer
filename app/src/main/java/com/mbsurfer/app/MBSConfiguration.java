@@ -57,7 +57,7 @@ public class MBSConfiguration {
 
     public enum UIConfiguration {
 
-        USER(UserMenu.VISIBLE_NAME, UserMenu.MAP, UserMenu.values());
+        USER(UserMenu.VISIBLE_NAME, UserMenu.MY_LOCATION, UserMenu.values());
 
         private int mVisibleName;
         private HomeMenuOption mDefaultMenuOption;

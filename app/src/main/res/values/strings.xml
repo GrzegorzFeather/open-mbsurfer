@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">Metrobus Surfer</string>
+    <string name="home_menu_my_location">My Location</string>
     <string name="home_menu_lines_map">Lines Map</string>
 
 </resources>

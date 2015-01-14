@@ -6,6 +6,7 @@ import com.mbsurfer.ui.widget.MBSToolbar;
 
 import android.support.v7.widget.Toolbar;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 
 /**
@@ -52,6 +53,13 @@ public abstract class MenuOptionFragment extends BaseFragment {
 
         toolbarComp.setLayoutParams(layoutParams);
         toolbarComp.setBackgroundColor(this.getResources().getColor(R.color.mbsPrimary));
+
+        if(toolbarComp.getChildCount() > 0){
+            if(toolbarComp.getChildAt(0) instanceof ImageButton){
+                ImageButton ib = (ImageButton) toolbarComp.getChildAt(0);
+                ib.clearColorFilter();
+            }
+        }
     }
 
     protected abstract MBSConfiguration.HomeMenuOption getMenuOption();
