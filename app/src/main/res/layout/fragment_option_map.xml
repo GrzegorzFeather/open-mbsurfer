@@ -28,37 +28,19 @@
                 android:orientation="vertical"
                 android:layout_margin="10dp">
 
-                <com.mbsurfer.ui.widget.TypeFacedTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    mbs:typeface="fonts/RobotoCondensed-Regular.ttf"
-                    android:textSize="22sp"
-                    android:text="From:"
-                    android:textColor="@color/mbsAccent"/>
-
-                <EditText
+                <com.mbsurfer.ui.widget.FloatLabelEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="2dp"/>
+                    mbs:floatEditTextHint="From" />
 
-                <com.mbsurfer.ui.widget.TypeFacedTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    mbs:typeface="fonts/RobotoCondensed-Regular.ttf"
-                    android:textSize="22sp"
-                    android:text="To:"
-                    android:textColor="@color/mbsAccent"/>
-
-                <EditText
+                <com.mbsurfer.ui.widget.FloatLabelEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="2dp"/>
+                    mbs:floatEditTextHint="To" />
 
             </LinearLayout>
 
         </android.support.v7.widget.CardView>
-
-
 
     </LinearLayout>
 

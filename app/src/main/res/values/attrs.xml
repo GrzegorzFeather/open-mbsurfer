@@ -3,7 +3,7 @@
     <declare-styleable name="TypeFacedView">
         <attr name="typeface" format="string"/>
     </declare-styleable>
-    <declare-styleable name="FloatableEditText">
+    <declare-styleable name="FloatLabelEditText">
         <attr name="floatEditTextAppearance" format="reference" />
         <attr name="floatEditTextPaddingLeft" format="reference|dimension" />
         <attr name="floatEditTextPaddingRight" format="reference|dimension" />

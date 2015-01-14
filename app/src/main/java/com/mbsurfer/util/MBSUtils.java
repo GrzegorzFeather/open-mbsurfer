@@ -1,6 +1,8 @@
 package com.mbsurfer.util;
 
+import android.content.Context;
 import android.util.Log;
+import android.util.TypedValue;
 
 
 /**
@@ -35,6 +37,15 @@ public class MBSUtils {
                 break;
             }
         }
+    }
+
+    /**
+     * Helper method to convert dips to pixels.
+     */
+    public static int dipsToPix(Context ctx, float dps) {
+        return (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, dps,
+                ctx.getResources().getDisplayMetrics());
     }
 
 }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mbs="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.mbsurfer.ui.widget.TypeFacedTextView
+        android:id="@+id/lbl_float_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        mbs:typeface="fonts/RobotoCondensed-Light.ttf"
+        android:textColor="@android:color/black"/>
+
+    <EditText
+        android:id="@+id/edit_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <!--
+    <com.mbsurfer.ui.widget.TypeFacedTextView
+        android:id="@+id/lbl_float_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        mbs:typeface="fonts/RobotoCondensed-Light.ttf"
+        android:textColor="@android:color/black"/>
+
+    <com.mbsurfer.ui.widget.TypeFacedEditText
+        android:id="@+id/edit_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        mbs:typeface="fonts/RobotoCondensed-Light.ttf"/>
+    -->
+
+</LinearLayout>
