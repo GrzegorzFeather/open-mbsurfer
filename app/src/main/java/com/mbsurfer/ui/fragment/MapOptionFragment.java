@@ -22,6 +22,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,9 @@ public class MapOptionFragment extends MenuOptionFragment
     private View mRootView;
     private MapView mMapView;
     private ProgressDialog mLocationProgress;
+
+    private int mToolbarColorId = android.R.color.transparent;
+    private int mToolbarTitlesColorId = R.color.mbsPrimary;
 
     private GoogleMap mMap;
 
@@ -147,22 +151,24 @@ public class MapOptionFragment extends MenuOptionFragment
 
     @Override
     protected void overrideToolbarSetup(MBSToolbar toolbar) {
-        super.overrideToolbarSetup(toolbar);
-        //toolbar.getToolbarComp().setBackgroundColor(this.getResources().getColor(android.R.color.transparent));
-
         final TypedArray styledAttributes = getActivity().getTheme().obtainStyledAttributes(
                 new int[] { android.R.attr.actionBarSize });
         int actionBarSize = (int) styledAttributes.getDimension(0, 0);
         styledAttributes.recycle();
 
-        ViewGroup.LayoutParams layoutParams = toolbar.getToolbarComp().getLayoutParams();
+        Toolbar toolbarComp = toolbar.getToolbarComp();
+        toolbar.setTitleColor(this.getResources().getColor(this.mToolbarTitlesColorId));
+        toolbar.setSubtitleColor(this.getResources().getColor(this.mToolbarTitlesColorId));
+
+        ViewGroup.LayoutParams layoutParams = toolbarComp.getLayoutParams();
         layoutParams.height = actionBarSize;
-        toolbar.getToolbarComp().setLayoutParams(layoutParams);
+
+        toolbarComp.setLayoutParams(layoutParams);
+        toolbarComp.setBackgroundColor(this.getResources().getColor(this.mToolbarColorId));
     }
 
     @Override
     public void onMyLocationChange(Location location) {
-
     }
 
     @Override

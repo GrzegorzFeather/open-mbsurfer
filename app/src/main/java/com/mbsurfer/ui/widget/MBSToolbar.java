@@ -40,8 +40,12 @@ public class MBSToolbar extends RelativeLayout {
         this.mLblTitle.setText(resId);
     }
 
-    public void setSTitle(CharSequence subtitle) {
+    public void setTitle(CharSequence subtitle) {
         this.mLblTitle.setText(subtitle);
+    }
+
+    public void setTitleColor(int color){
+        this.mLblTitle.setTextColor(color);
     }
 
     public void setSubtitle(int resId) {
@@ -50,6 +54,10 @@ public class MBSToolbar extends RelativeLayout {
 
     public void setSubtitle(CharSequence subtitle) {
         this.mLblSubtitle.setText(subtitle);
+    }
+
+    public void setSubtitleColor(int color){
+        this.mLblSubtitle.setTextColor(color);
     }
 
     public void setOnMenuItemClickListener(Toolbar.OnMenuItemClickListener listener){

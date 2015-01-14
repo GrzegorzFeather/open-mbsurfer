@@ -1,7 +1,12 @@
 package com.mbsurfer.ui.fragment;
 
+import com.mbsurfer.R;
 import com.mbsurfer.app.MBSConfiguration;
 import com.mbsurfer.ui.widget.MBSToolbar;
+
+import android.support.v7.widget.Toolbar;
+import android.view.ViewGroup;
+
 
 /**
  * Created by GrzegorzFeathers on 1/5/15.
@@ -37,7 +42,17 @@ public abstract class MenuOptionFragment extends BaseFragment {
         return this.getMenuHostActivity().getToolbar();
     }
 
-    protected void overrideToolbarSetup(MBSToolbar toolbar){}
+    protected void overrideToolbarSetup(MBSToolbar toolbar){
+        Toolbar toolbarComp = toolbar.getToolbarComp();
+        toolbar.setTitleColor(this.getResources().getColor(android.R.color.white));
+        toolbar.setSubtitleColor(this.getResources().getColor(android.R.color.white));
+
+        ViewGroup.LayoutParams layoutParams = toolbarComp.getLayoutParams();
+        layoutParams.height = this.getResources().getDimensionPixelSize(R.dimen.toolbar_height);
+
+        toolbarComp.setLayoutParams(layoutParams);
+        toolbarComp.setBackgroundColor(this.getResources().getColor(R.color.mbsPrimary));
+    }
 
     protected abstract MBSConfiguration.HomeMenuOption getMenuOption();
 

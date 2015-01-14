@@ -17,8 +17,7 @@ public enum UserMenu implements MBSConfiguration.HomeMenuOption {
     //EVENTS(EventsFragment.class, R.string.home_menu_events, R.drawable.ic_events, true),
     //DISCOGRAPHY(DiscographyFragment.class, R.string.home_menu_discography, R.drawable.ic_discography, true),
     //GALLERY(GalleryFragment.class, R.string.home_menu_gallery, R.drawable.ic_gallery, true);
-    MAP(MapOptionFragment.class, R.string.app_name, R.drawable.ic_launcher, true)
-    ;
+    MAP(MapOptionFragment.class, R.string.app_name, R.drawable.ic_launcher, true);
 
     // TODO: Rename configuration
     public static final int VISIBLE_NAME = R.string.app_name;
