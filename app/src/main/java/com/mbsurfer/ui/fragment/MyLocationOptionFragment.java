@@ -94,8 +94,16 @@ public class MyLocationOptionFragment extends MenuOptionFragment
         }
     }
 
-    private void moveMapCameraTo(Location location, boolean animate){
+    private void moveMapCameraTo(final Location location, boolean animate){
         if(location == null) { return; }
+
+        this.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                showClosestStation(location);
+            }
+        });
+
         CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(
                 new LatLng(location.getLatitude(), location.getLongitude()),
                 animate ? this.mMap.getCameraPosition().zoom : 16.5f);
@@ -181,7 +189,31 @@ public class MyLocationOptionFragment extends MenuOptionFragment
     }
 
     @Override
-    public void onMyLocationChange(Location location) {
+    public void onMyLocationChange(final Location location) {
+        this.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                showClosestStation(location);
+            }
+        });
+    }
+
+    private void showClosestStation(Location location){
+        double distance = Double.MAX_VALUE;
+        Station closestStation = null;
+
+        double calculatedDistance;
+        for(Line l : Line.values()){
+            for(Station s : l.getStations()){
+                calculatedDistance = MBSUtils.distance(
+                        location.getLatitude(), location.getLongitude(),
+                        s.getLatLng().latitude, s.getLatLng().longitude);
+                if(calculatedDistance < distance){
+                    distance = calculatedDistance;
+                    closestStation = s;
+                }
+            }
+        }
     }
 
     @Override
