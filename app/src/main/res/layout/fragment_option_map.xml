@@ -10,26 +10,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <Button android:id="@+id/btn_slide_open"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:text="Open"/>
-
-    <Button android:id="@+id/btn_slide_close"
-        android:layout_below="@id/btn_slide_open"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="5dp"
-        android:text="Close"/>
-
     <com.mbsurfer.ui.widget.SlidingLinearLayout
         android:id="@+id/layout_directions"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@android:color/black"
-        android:layout_alignParentBottom="true"/>
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"/>
 
 </RelativeLayout>

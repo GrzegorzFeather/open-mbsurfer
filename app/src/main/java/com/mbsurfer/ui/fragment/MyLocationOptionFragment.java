@@ -10,6 +10,7 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.SphericalUtil;
 
 import com.mbsurfer.R;
 import com.mbsurfer.app.MBSConfiguration;
@@ -47,7 +48,7 @@ public class MyLocationOptionFragment extends MenuOptionFragment
 
     private GoogleMap mMap;
 
-    private boolean mFirstStationRecommended = false;
+    private boolean mIsFirstRecommendation = true;
 
     @Override
     public void onAttach(Activity activity) {
@@ -63,13 +64,8 @@ public class MyLocationOptionFragment extends MenuOptionFragment
         this.mMapView.onCreate(savedInstanceState);
 
         this.mDirectionsLayout = (SlidingLinearLayout) this.mRootView.findViewById(R.id.layout_directions);
-        this.mRootView.findViewById(R.id.btn_slide_open).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDirectionsLayout.open();
-            }
-        });
-        this.mRootView.findViewById(R.id.btn_slide_close).setOnClickListener(new View.OnClickListener() {
+
+        this.mRootView.findViewById(R.id.btn_close).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mDirectionsLayout.close();
@@ -89,7 +85,8 @@ public class MyLocationOptionFragment extends MenuOptionFragment
             @Override
             public boolean onMarkerClick(Marker marker) {
                 marker.getSnippet();
-                return true;
+                mDirectionsLayout.open();
+                return false;
             }
         });
 
@@ -112,6 +109,7 @@ public class MyLocationOptionFragment extends MenuOptionFragment
                 map.addMarker(new MarkerOptions()
                                       .title(s.getLine().toString())
                                       .snippet(s.getName())
+                                      .draggable(false)
                                       .position(s.getLatLng())
                                       .icon(s.getLine().getMarkerBitmapDescriptor()));
             }
@@ -229,9 +227,9 @@ public class MyLocationOptionFragment extends MenuOptionFragment
         double calculatedDistance;
         for(Line l : Line.values()){
             for(Station s : l.getStations()){
-                calculatedDistance = MBSUtils.distance(
-                        location.getLatitude(), location.getLongitude(),
-                        s.getLatLng().latitude, s.getLatLng().longitude);
+                calculatedDistance = SphericalUtil.computeDistanceBetween(
+                        new LatLng(location.getLatitude(), location.getLongitude()),
+                        s.getLatLng());
                 if(calculatedDistance < distance){
                     distance = calculatedDistance;
                     closestStation = s;
@@ -239,9 +237,10 @@ public class MyLocationOptionFragment extends MenuOptionFragment
             }
         }
 
-        if(!this.mFirstStationRecommended){
-            this.mFirstStationRecommended = true;
+        if(this.mIsFirstRecommendation){
+            this.mIsFirstRecommendation = false;
             this.mDirectionsLayout.open();
+            this.mDirectionsLayout.setFromStation(closestStation);
         }
     }
 
