@@ -33,14 +33,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
  * Created by GrzegorzFeathers on 1/5/15.
  */
 public class MyLocationOptionFragment extends MenuOptionFragment
-        implements GoogleMap.OnMyLocationChangeListener, HomeMenuFragment.OnDrawerSlideListener{
+        implements GoogleMap.OnMyLocationChangeListener, HomeMenuFragment.OnDrawerSlideListener {
 
     private View mRootView;
     private MapView mMapView;
@@ -49,6 +55,7 @@ public class MyLocationOptionFragment extends MenuOptionFragment
     private GoogleMap mMap;
 
     private boolean mIsFirstRecommendation = true;
+    private Map<String, Station> mStationMarkers = new HashMap<>();
 
     @Override
     public void onAttach(Activity activity) {
@@ -75,20 +82,23 @@ public class MyLocationOptionFragment extends MenuOptionFragment
         return this.mRootView;
     }
 
-    private void setupMap(GoogleMap map){
+    private void setupMap(final GoogleMap map){
         this.mMap = map;
+
         this.mMap.setMyLocationEnabled(true);
         this.mMap.setOnMyLocationChangeListener(this);
-        this.mMap.setPadding(0, MBSUtils.getActionBarSize(this.getActivity()),
-                             0, MBSUtils.getActionBarSize(this.getActivity()));
+        this.mMap.setPadding(0, MBSUtils.getActionBarSize(this.getActivity()), 0, 0);
         this.mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                marker.getSnippet();
-                mDirectionsLayout.open();
+                mDirectionsLayout.setFromStation(mStationMarkers.get(marker.getId()));
                 return false;
             }
         });
+
+        LinesInfoWindowManager infoWindowManager = new LinesInfoWindowManager(this.getActivity());
+        this.mMap.setInfoWindowAdapter(infoWindowManager);
+        this.mMap.setOnInfoWindowClickListener(infoWindowManager);
 
         UiSettings settings = this.mMap.getUiSettings();
         settings.setAllGesturesEnabled(true);
@@ -104,14 +114,16 @@ public class MyLocationOptionFragment extends MenuOptionFragment
     }
 
     private void drawLinesInMap(GoogleMap map){
+        this.mStationMarkers.clear();
         for(Line l : Line.values()){
             for(Station s : l.getStations()){
-                map.addMarker(new MarkerOptions()
-                                      .title(s.getLine().toString())
-                                      .snippet(s.getName())
-                                      .draggable(false)
-                                      .position(s.getLatLng())
-                                      .icon(s.getLine().getMarkerBitmapDescriptor()));
+                Marker marker = map.addMarker(new MarkerOptions()
+                      .title(s.getLine().toString())
+                      .snippet(s.getName())
+                      .draggable(false)
+                      .position(s.getLatLng())
+                      .icon(s.getLine().getMarkerBitmapDescriptor()));
+                this.mStationMarkers.put(marker.getId(), s);
             }
         }
     }
@@ -275,6 +287,64 @@ public class MyLocationOptionFragment extends MenuOptionFragment
                 ImageButton ib = (ImageButton) toolbar.getChildAt(0);
                 ib.setColorFilter(toolbarChildrenColor);
             }
+        }
+    }
+
+    private class LinesInfoWindowManager implements GoogleMap.InfoWindowAdapter, GoogleMap.OnInfoWindowClickListener {
+
+        private Context mContext;
+        private View mRootView;
+        private ImageView mImgStation;
+        private TextView mLblLine;
+        private TextView mLblStation;
+        private Button mBtnOrigin;
+        private Button mBtnDestination;
+
+        public LinesInfoWindowManager(Context context){
+            this.mContext = context;
+            this.mRootView = LayoutInflater.from(this.mContext).inflate(
+                    R.layout.layout_station_info_window, null, false);
+            this.mImgStation = (ImageView) this.mRootView.findViewById(R.id.img_station);
+            this.mLblLine = (TextView) this.mRootView.findViewById(R.id.lbl_line);
+            this.mLblStation = (TextView) this.mRootView.findViewById(R.id.lbl_station);
+            this.mBtnOrigin = (Button) this.mRootView.findViewById(R.id.btn_origin);
+            this.mBtnDestination = (Button) this.mRootView.findViewById(R.id.btn_destination);
+
+            this.mBtnOrigin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mDirectionsLayout.setFromStation(mStationMarkers.get(((Marker) v.getTag()).getId()));
+                }
+            });
+            this.mBtnDestination.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mDirectionsLayout.setToStation(mStationMarkers.get(((Marker)v.getTag()).getId()));
+                }
+            });
+        }
+
+        @Override
+        public View getInfoWindow(Marker marker) {
+            return null;
+        }
+
+        @Override
+        public View getInfoContents(Marker marker) {
+            Station station = mStationMarkers.get(marker.getId());
+
+            this.mLblLine.setText(station.getLine().toString());
+            this.mLblStation.setText(station.getName());
+            this.mImgStation.setImageResource(station.getIconId());
+
+            this.mBtnOrigin.setTag(marker);
+            this.mBtnDestination.setTag(marker);
+
+            return this.mRootView;
+        }
+
+        @Override
+        public void onInfoWindowClick(Marker marker) {
         }
     }
 }

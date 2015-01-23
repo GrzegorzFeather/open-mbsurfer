@@ -64,4 +64,8 @@ public abstract class MenuOptionFragment extends BaseFragment {
 
     protected abstract MBSConfiguration.HomeMenuOption getMenuOption();
 
+    public boolean onBackPressed(){
+        return false;
+    }
+
 }

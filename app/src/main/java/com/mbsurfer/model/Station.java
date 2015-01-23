@@ -2,6 +2,7 @@ package com.mbsurfer.model;
 
 import com.google.android.gms.maps.model.LatLng;
 
+
 public class Station {
 
     private Line mLine;
@@ -31,5 +32,4 @@ public class Station {
     public LatLng getLatLng(){
             return this.mLatLng;
     }
-	
 }

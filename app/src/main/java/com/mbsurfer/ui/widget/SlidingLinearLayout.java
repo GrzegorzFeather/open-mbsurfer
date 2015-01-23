@@ -6,6 +6,7 @@ import com.mbsurfer.model.Station;
 import android.content.Context;
 import android.os.Build;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.view.ViewPropertyAnimatorListener;
 import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -21,7 +22,7 @@ import android.widget.TextView;
 public class SlidingLinearLayout extends CardView {
 
     private enum Status {
-        OPEN, SLIDING, CLOSED;
+        OPEN, CLOSED;
     }
 
     private static final Status defaultStatus = Status.CLOSED;
@@ -84,7 +85,22 @@ public class SlidingLinearLayout extends CardView {
             ViewCompat.animate(this)
                     .translationY(this.mTranslation)
                     .setDuration(300)
-                    .setListener(null)
+                    .setListener(new ViewPropertyAnimatorListener() {
+                        @Override
+                        public void onAnimationStart(View view) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(View view) {
+                            mCurrentStatus = Status.CLOSED;
+                        }
+
+                        @Override
+                        public void onAnimationCancel(View view) {
+
+                        }
+                    })
                     .setInterpolator(AnimationUtils.loadInterpolator(
                             getContext(), Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
                                     ? android.R.interpolator.fast_out_slow_in
@@ -92,6 +108,7 @@ public class SlidingLinearLayout extends CardView {
                     .start();
         } else {
             ViewCompat.setTranslationY(this, this.mTranslation);
+            this.mCurrentStatus = Status.CLOSED;
         }
     }
 
@@ -104,7 +121,22 @@ public class SlidingLinearLayout extends CardView {
             ViewCompat.animate(this)
                     .translationY(5f)
                     .setDuration(300)
-                    .setListener(null)
+                    .setListener(new ViewPropertyAnimatorListener() {
+                        @Override
+                        public void onAnimationStart(View view) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(View view) {
+                            mCurrentStatus = Status.OPEN;
+                        }
+
+                        @Override
+                        public void onAnimationCancel(View view) {
+
+                        }
+                    })
                     .setInterpolator(AnimationUtils.loadInterpolator(
                             getContext(), Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
                                     ? android.R.interpolator.fast_out_slow_in
@@ -112,12 +144,20 @@ public class SlidingLinearLayout extends CardView {
                     .start();
         } else {
             ViewCompat.setTranslationY(this, 5f);
+            mCurrentStatus = Status.OPEN;
         }
     }
 
     public void setFromStation(Station from){
         this.mFromStation = from;
         this.setupDirections();
+        this.open();
+    }
+
+    public void setToStation(Station to) {
+        this.mToStation = to;
+        this.setupDirections();
+        this.open();
     }
 
     private void setupDirections(){
@@ -158,6 +198,14 @@ public class SlidingLinearLayout extends CardView {
         this.mFromStation = this.mToStation;
         this.mToStation = temp;
         this.setupDirections();
+    }
+
+    public boolean isOpened(){
+        return this.mCurrentStatus.equals(Status.OPEN);
+    }
+
+    public boolean isClosed(){
+        return this.mCurrentStatus.equals(Status.CLOSED);
     }
 
 }
