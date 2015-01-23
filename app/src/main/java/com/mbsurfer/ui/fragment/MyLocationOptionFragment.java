@@ -8,6 +8,7 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import com.mbsurfer.R;
@@ -16,11 +17,11 @@ import com.mbsurfer.app.menu.UserMenu;
 import com.mbsurfer.model.Line;
 import com.mbsurfer.model.Station;
 import com.mbsurfer.ui.widget.MBSToolbar;
+import com.mbsurfer.ui.widget.SlidingLinearLayout;
 import com.mbsurfer.util.MBSUtils;
 
 import android.animation.ArgbEvaluator;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.location.Location;
@@ -42,9 +43,11 @@ public class MyLocationOptionFragment extends MenuOptionFragment
 
     private View mRootView;
     private MapView mMapView;
-    private ProgressDialog mLocationProgress;
+    private SlidingLinearLayout mDirectionsLayout;
 
     private GoogleMap mMap;
+
+    private boolean mFirstStationRecommended = false;
 
     @Override
     public void onAttach(Activity activity) {
@@ -59,6 +62,20 @@ public class MyLocationOptionFragment extends MenuOptionFragment
         this.mMapView = (MapView) this.mRootView.findViewById(R.id.map);
         this.mMapView.onCreate(savedInstanceState);
 
+        this.mDirectionsLayout = (SlidingLinearLayout) this.mRootView.findViewById(R.id.layout_directions);
+        this.mRootView.findViewById(R.id.btn_slide_open).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDirectionsLayout.open();
+            }
+        });
+        this.mRootView.findViewById(R.id.btn_slide_close).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDirectionsLayout.close();
+            }
+        });
+
         return this.mRootView;
     }
 
@@ -66,12 +83,19 @@ public class MyLocationOptionFragment extends MenuOptionFragment
         this.mMap = map;
         this.mMap.setMyLocationEnabled(true);
         this.mMap.setOnMyLocationChangeListener(this);
-        this.mMap.setPadding(0, MBSUtils.getActionBarSize(this.getActivity()), 0, 0);
+        this.mMap.setPadding(0, MBSUtils.getActionBarSize(this.getActivity()),
+                             0, MBSUtils.getActionBarSize(this.getActivity()));
+        this.mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                marker.getSnippet();
+                return true;
+            }
+        });
 
         UiSettings settings = this.mMap.getUiSettings();
         settings.setAllGesturesEnabled(true);
         settings.setMapToolbarEnabled(true);
-        settings.setZoomControlsEnabled(true);
         settings.setMyLocationButtonEnabled(true);
 
         Location myLocation = this.mMap.getMyLocation();
@@ -86,10 +110,10 @@ public class MyLocationOptionFragment extends MenuOptionFragment
         for(Line l : Line.values()){
             for(Station s : l.getStations()){
                 map.addMarker(new MarkerOptions()
-                        .title(s.getLine().toString())
-                        .snippet(s.getName())
-                        .position(s.getLatLng())
-                        .icon(s.getLine().getMarkerBitmapDescriptor()));
+                                      .title(s.getLine().toString())
+                                      .snippet(s.getName())
+                                      .position(s.getLatLng())
+                                      .icon(s.getLine().getMarkerBitmapDescriptor()));
             }
         }
     }
@@ -213,6 +237,11 @@ public class MyLocationOptionFragment extends MenuOptionFragment
                     closestStation = s;
                 }
             }
+        }
+
+        if(!this.mFirstStationRecommended){
+            this.mFirstStationRecommended = true;
+            this.mDirectionsLayout.open();
         }
     }
 
