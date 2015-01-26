@@ -22,7 +22,7 @@ import android.widget.TextView;
 public class SlidingLinearLayout extends CardView {
 
     private enum Status {
-        OPEN, CLOSED;
+        OPEN, FIRST_LEVEL, CLOSED;
     }
 
     private static final Status defaultStatus = Status.CLOSED;
@@ -36,7 +36,8 @@ public class SlidingLinearLayout extends CardView {
     private ImageView mImageTo;
 
     private Status mCurrentStatus = defaultStatus;
-    private float mTranslation = 0f;
+    private float mFirstLevelTranslation = 0f;
+    private float mFullTranslation = 0f;
     private boolean mIsFirstCreation = true;
 
     public SlidingLinearLayout(Context context) {
@@ -69,7 +70,8 @@ public class SlidingLinearLayout extends CardView {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
-        this.mTranslation = Math.abs(t - b);
+        this.mFullTranslation = Math.abs(t - b);
+        this.mFirstLevelTranslation = this.mFullTranslation - this.findViewById(R.id.layout_first_level).getHeight();
         if(this.mIsFirstCreation){
             this.mIsFirstCreation = false;
             this.close(false);
@@ -83,7 +85,7 @@ public class SlidingLinearLayout extends CardView {
     private void close(boolean animate){
         if(animate){
             ViewCompat.animate(this)
-                    .translationY(this.mTranslation)
+                    .translationY(this.mFullTranslation)
                     .setDuration(300)
                     .setListener(new ViewPropertyAnimatorListener() {
                         @Override
@@ -107,8 +109,44 @@ public class SlidingLinearLayout extends CardView {
                                     : android.R.anim.decelerate_interpolator))
                     .start();
         } else {
-            ViewCompat.setTranslationY(this, this.mTranslation);
+            ViewCompat.setTranslationY(this, this.mFullTranslation);
             this.mCurrentStatus = Status.CLOSED;
+        }
+    }
+
+    public void openFirstLevel(){
+        this.openFirstLevel(true);
+    }
+
+    private void openFirstLevel(boolean animate){
+        if(animate){
+            ViewCompat.animate(this)
+                    .translationY(this.mFirstLevelTranslation)
+                    .setDuration(300)
+                    .setListener(new ViewPropertyAnimatorListener() {
+                        @Override
+                        public void onAnimationStart(View view) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(View view) {
+                            mCurrentStatus = Status.FIRST_LEVEL;
+                        }
+
+                        @Override
+                        public void onAnimationCancel(View view) {
+
+                        }
+                    })
+                    .setInterpolator(AnimationUtils.loadInterpolator(
+                            getContext(), Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+                                    ? android.R.interpolator.fast_out_slow_in
+                                    : android.R.anim.decelerate_interpolator))
+                    .start();
+        } else {
+            ViewCompat.setTranslationY(this, this.mFirstLevelTranslation);
+            this.mCurrentStatus = Status.FIRST_LEVEL;
         }
     }
 
@@ -151,13 +189,13 @@ public class SlidingLinearLayout extends CardView {
     public void setFromStation(Station from){
         this.mFromStation = from;
         this.setupDirections();
-        this.open();
+        this.openFirstLevel();
     }
 
     public void setToStation(Station to) {
         this.mToStation = to;
         this.setupDirections();
-        this.open();
+        this.openFirstLevel();
     }
 
     private void setupDirections(){

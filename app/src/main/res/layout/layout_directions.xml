@@ -8,91 +8,188 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        android:orientation="horizontal"
-        android:background="@android:color/white">
+        android:orientation="vertical">
 
-        <ImageButton android:id="@+id/btn_swap"
-            android:layout_width="wrap_content"
+        <LinearLayout android:id="@+id/layout_first_level"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_swap"
-            android:background="@android:color/transparent"
-            android:layout_gravity="center_vertical"/>
+            android:layout_margin="2dp"
+            android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:padding="10dp"
-            android:layout_marginLeft="3dp">
+            <ImageButton android:id="@+id/btn_swap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_swap"
+                android:background="@android:color/transparent"
+                android:layout_gravity="center_vertical"/>
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="7dp">
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:layout_marginLeft="3dp">
 
-                <ImageView android:id="@+id/img_from"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:src="@drawable/ic_search"
-                    android:adjustViewBounds="true"
-                    android:layout_gravity="center_vertical"/>
-
-                <com.mbsurfer.ui.widget.TypeFacedTextView
-                    android:id="@+id/lbl_from"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="From"
-                    android:textSize="18sp"
-                    mbs:typeface="fonts/RobotoCondensed-Light.ttf"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="7dp"/>
+                    android:orientation="horizontal"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="7dp">
+
+                    <ImageView android:id="@+id/img_from"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/ic_search"
+                        android:adjustViewBounds="true"
+                        android:layout_gravity="center_vertical"/>
+
+                    <com.mbsurfer.ui.widget.TypeFacedTextView
+                        android:id="@+id/lbl_from"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="From"
+                        android:textSize="18sp"
+                        mbs:typeface="fonts/RobotoCondensed-Light.ttf"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="7dp"/>
+
+                </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#ccc"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="7dp"
+                    android:layout_marginBottom="4dp">
+
+                    <ImageView android:id="@+id/img_to"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/ic_search"
+                        android:adjustViewBounds="true"
+                        android:layout_gravity="center_vertical"/>
+
+                    <com.mbsurfer.ui.widget.TypeFacedTextView
+                        android:id="@+id/lbl_to"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="To"
+                        android:textSize="18sp"
+                        mbs:typeface="fonts/RobotoCondensed-Light.ttf"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="7dp"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#ccc"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <ImageButton android:id="@+id/btn_close"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="7dp"
-                android:layout_marginBottom="4dp">
-
-                <ImageView android:id="@+id/img_to"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:src="@drawable/ic_search"
-                    android:adjustViewBounds="true"
-                    android:layout_gravity="center_vertical"/>
-
-                <com.mbsurfer.ui.widget.TypeFacedTextView
-                    android:id="@+id/lbl_to"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="To"
-                    android:textSize="18sp"
-                    mbs:typeface="fonts/RobotoCondensed-Light.ttf"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="7dp"/>
-
-            </LinearLayout>
+                android:src="@drawable/ic_close"
+                android:background="@android:color/transparent"/>
 
         </LinearLayout>
 
-        <ImageButton android:id="@+id/btn_close"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_close"
-            android:background="@android:color/transparent"/>
+            android:layout_margin="2dp"
+            android:orientation="horizontal"
+            android:background="@android:color/black">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_swap"
+                android:background="@android:color/transparent"
+                android:layout_gravity="center_vertical"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:layout_marginLeft="3dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="7dp">
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/ic_search"
+                        android:adjustViewBounds="true"
+                        android:layout_gravity="center_vertical"/>
+
+                    <com.mbsurfer.ui.widget.TypeFacedTextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="From"
+                        android:textSize="18sp"
+                        mbs:typeface="fonts/RobotoCondensed-Light.ttf"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="7dp"/>
+
+                </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#ccc"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="7dp"
+                    android:layout_marginBottom="4dp">
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/ic_search"
+                        android:adjustViewBounds="true"
+                        android:layout_gravity="center_vertical"/>
+
+                    <com.mbsurfer.ui.widget.TypeFacedTextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="To"
+                        android:textSize="18sp"
+                        mbs:typeface="fonts/RobotoCondensed-Light.ttf"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="7dp"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_close"
+                android:background="@android:color/transparent"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
