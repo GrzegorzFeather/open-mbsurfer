@@ -7,11 +7,13 @@ import com.mbsurfer.util.MBSUtils;
 import android.content.Context;
 import android.os.Build;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.view.ViewPropertyAnimatorListener;
 import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,14 +34,17 @@ public class SlidingLinearLayout extends CardView {
     private Station mFromStation = null;
     private TextView mLblFrom;
     private ImageView mImageFrom;
+    private EditText mEditFrom;
 
     private Station mToStation = null;
     private TextView mLblTo;
     private ImageView mImageTo;
+    private EditText mEditTo;
 
     private Status mCurrentStatus = defaultStatus;
     private float mFirstLevelTranslation = 0f;
     private float mFullTranslation = 0f;
+    private boolean mIsFirstCreation = true;
 
     public SlidingLinearLayout(Context context) {
         this(context, null);
@@ -56,9 +61,41 @@ public class SlidingLinearLayout extends CardView {
 
         this.mLblFrom = (TextView) this.findViewById(R.id.lbl_from);
         this.mImageFrom = (ImageView) this.findViewById(R.id.img_from);
+        this.mEditFrom = (EditText) this.findViewById(R.id.edit_from);
+        this.mEditFrom.setOnFocusChangeListener(new OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus){
+                    setAsLabel(mLblFrom, mEditFrom);
+                }
+            }
+        });
+        this.mLblFrom.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setAsEditable(mLblFrom, mEditFrom);
+                openFull();
+            }
+        });
 
         this.mLblTo = (TextView) this.findViewById(R.id.lbl_to);
         this.mImageTo = (ImageView) this.findViewById(R.id.img_to);
+        this.mEditTo = (EditText) this.findViewById(R.id.edit_to);
+        this.mEditTo.setOnFocusChangeListener(new OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus){
+                    setAsLabel(mLblTo, mEditTo);
+                }
+            }
+        });
+        this.mLblTo.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setAsEditable(mLblTo, mEditTo);
+                openFull();
+            }
+        });
 
         this.findViewById(R.id.btn_swap).setOnClickListener(new OnClickListener() {
             @Override
@@ -74,20 +111,34 @@ public class SlidingLinearLayout extends CardView {
         MBSUtils.log(TAG, "onLayout: Current Status: " + this.mCurrentStatus);
         this.mFullTranslation = Math.abs(t - b);
         this.mFirstLevelTranslation = this.mFullTranslation - this.findViewById(R.id.layout_first_level).getHeight();
-        switch (this.mCurrentStatus){
-            case CLOSED:
-                MBSUtils.log(TAG, "onLayout - Will close");
-                this.open(false);
-                break;
-            case FIRST_LEVEL:
-                MBSUtils.log(TAG, "onLayout - Will open first level");
-                this.openFirstLevel(false);
-                break;
-            case OPEN:
-                MBSUtils.log(TAG, "onLayout - Will open full");
-                this.close(false);
-                break;
+        if(this.mIsFirstCreation){
+            this.mIsFirstCreation = false;
+            switch (this.mCurrentStatus){
+                case CLOSED:
+                    MBSUtils.log(TAG, "onLayout - Will close");
+                    this.openFull(false);
+                    break;
+                case FIRST_LEVEL:
+                    MBSUtils.log(TAG, "onLayout - Will open first level");
+                    this.openFirstLevel(false);
+                    break;
+                case OPEN:
+                    MBSUtils.log(TAG, "onLayout - Will open full");
+                    this.close(false);
+                    break;
+            }
         }
+    }
+
+    private void setAsEditable(TextView tv, EditText et){
+        tv.setVisibility(INVISIBLE);
+        et.setVisibility(VISIBLE);
+        et.requestFocus();
+    }
+
+    private void setAsLabel(TextView tv, EditText et){
+        tv.setVisibility(VISIBLE);
+        et.setVisibility(INVISIBLE);
     }
 
     public void close(){
@@ -100,7 +151,15 @@ public class SlidingLinearLayout extends CardView {
             ViewCompat.animate(this)
                     .translationY(this.mFullTranslation)
                     .setDuration(300)
-                    .setListener(null)
+                    .setListener(new ViewPropertyAnimatorListener() {
+                        @Override public void onAnimationStart(View view) {}
+                        @Override public void onAnimationCancel(View view) {}
+                        @Override
+                        public void onAnimationEnd(View view) {
+                            setAsLabel(mLblFrom, mEditFrom);
+                            setAsLabel(mLblTo, mEditTo);
+                        }
+                    })
                     .setInterpolator(AnimationUtils.loadInterpolator(
                             getContext(), Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
                                     ? android.R.interpolator.fast_out_slow_in
@@ -108,6 +167,8 @@ public class SlidingLinearLayout extends CardView {
                     .start();
         } else {
             ViewCompat.setTranslationY(this, this.mFullTranslation);
+            this.setAsLabel(this.mLblFrom, this.mEditFrom);
+            this.setAsLabel(this.mLblTo, this.mEditTo);
         }
     }
 
@@ -135,11 +196,11 @@ public class SlidingLinearLayout extends CardView {
         }
     }
 
-    public void open(){
-        this.open(true);
+    public void openFull(){
+        this.openFull(true);
     }
 
-    private void open(boolean animate){
+    private void openFull(boolean animate){
         this.mCurrentStatus = Status.OPEN;
         if(animate){
             ViewCompat.animate(this)
@@ -162,6 +223,7 @@ public class SlidingLinearLayout extends CardView {
 
     public void setFromStation(Station from, boolean animate) {
         this.mFromStation = from;
+        this.setAsLabel(this.mLblFrom, this.mEditFrom);
         this.setupDirections();
         this.openFirstLevel(animate);
     }
@@ -172,6 +234,7 @@ public class SlidingLinearLayout extends CardView {
 
     public void setToStation(Station to, boolean animate) {
         this.mToStation = to;
+        this.setAsLabel(this.mLblTo, this.mEditTo);
         this.setupDirections();
         this.openFirstLevel(animate);
     }
