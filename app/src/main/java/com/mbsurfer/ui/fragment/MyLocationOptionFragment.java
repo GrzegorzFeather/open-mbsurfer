@@ -251,8 +251,7 @@ public class MyLocationOptionFragment extends MenuOptionFragment
 
         if(this.mIsFirstRecommendation){
             this.mIsFirstRecommendation = false;
-            this.mDirectionsLayout.open();
-            this.mDirectionsLayout.setFromStation(closestStation);
+            this.mDirectionsLayout.setFromStation(closestStation, false);
         }
     }
 
