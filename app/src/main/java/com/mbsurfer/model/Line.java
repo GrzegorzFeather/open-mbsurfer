@@ -5,6 +5,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
 import com.mbsurfer.R;
 
+import java.text.Collator;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +33,6 @@ public enum Line {
     private int lineBackground;
     private int lineMarkerId;
     private List<Station> stations;
-    //private StationsItemizedOverlay itemizedOverlay = null;
 
     private Line(String lineName, String lineColor, int titleBackground,
                         int lineIconId, int lineBackground, int lineMarker) {
@@ -42,6 +43,27 @@ public enum Line {
         this.lineBackground = lineBackground;
         this.lineMarkerId = lineMarker;
         this.fillLine();
+    }
+
+    public static List<Station> getFilteredStations(String query){
+        Collator collator = Collator.getInstance(Station.defaultLocale);
+        collator.setStrength(Collator.PRIMARY);
+
+        String normalizedQuery = Normalizer.normalize(
+                query.toLowerCase(Station.defaultLocale),
+                Normalizer.Form.NFD).replaceAll("[^a-zA-Z ]", "");
+
+        List<Station> filteredStations = new ArrayList<>();
+        for(Line l : Line.values()){
+            for(Station s : l.getStations()){
+                if(collator.equals(s.getNormalizedName(), query)
+                        || s.getNormalizedName().contains(normalizedQuery)){
+                    filteredStations.add(s);
+                }
+            }
+        }
+
+        return filteredStations;
     }
 
     private void fillLine() {

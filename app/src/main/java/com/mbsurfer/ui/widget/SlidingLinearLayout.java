@@ -1,6 +1,7 @@
 package com.mbsurfer.ui.widget;
 
 import com.mbsurfer.R;
+import com.mbsurfer.model.Line;
 import com.mbsurfer.model.Station;
 import com.mbsurfer.util.MBSUtils;
 
@@ -9,6 +10,8 @@ import android.os.Build;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorListener;
 import android.support.v7.widget.CardView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +21,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.List;
 
 
 /**
@@ -29,6 +34,10 @@ public class SlidingLinearLayout extends CardView {
 
     public enum Status {
         OPEN_FULL, FIRST_LEVEL, CLOSED;
+    }
+
+    private enum EditableField {
+        FROM, TO;
     }
 
     private static final Status defaultStatus = Status.CLOSED;
@@ -47,6 +56,7 @@ public class SlidingLinearLayout extends CardView {
     private float mFirstLevelTranslation = 0f;
     private float mFullTranslation = 0f;
     private boolean mIsFirstCreation = true;
+    private EditableField mCurrentSearch = EditableField.TO;
 
     public SlidingLinearLayout(Context context) {
         this(context, null);
@@ -75,7 +85,7 @@ public class SlidingLinearLayout extends CardView {
         this.mLblFrom.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                setAsEditable(mLblFrom, mEditFrom);
+                setAsEditable(mLblFrom, mEditFrom, EditableField.FROM);
                 openFull();
             }
         });
@@ -83,6 +93,13 @@ public class SlidingLinearLayout extends CardView {
         this.mLblTo = (TextView) this.findViewById(R.id.lbl_to);
         this.mImageTo = (ImageView) this.findViewById(R.id.img_to);
         this.mEditTo = (EditText) this.findViewById(R.id.edit_to);
+        this.mLblTo.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setAsEditable(mLblTo, mEditTo, EditableField.TO);
+                openFull();
+            }
+        });
         this.mEditTo.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -91,13 +108,8 @@ public class SlidingLinearLayout extends CardView {
                 }
             }
         });
-        this.mLblTo.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setAsEditable(mLblTo, mEditTo);
-                openFull();
-            }
-        });
+        this.mEditTo.addTextChangedListener(new SearchTextWatcher());
+
 
         this.findViewById(R.id.btn_swap).setOnClickListener(new OnClickListener() {
             @Override
@@ -144,13 +156,14 @@ public class SlidingLinearLayout extends CardView {
         }
     }
 
-    private void setAsEditable(TextView tv, EditText et){
+    private void setAsEditable(TextView tv, EditText et, EditableField field){
         tv.setVisibility(INVISIBLE);
         et.setVisibility(VISIBLE);
         et.requestFocus();
         InputMethodManager imm = (InputMethodManager) this.getContext()
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(et, InputMethodManager.SHOW_IMPLICIT);
+        this.mCurrentSearch = field;
     }
 
     private void setAsLabel(TextView tv, EditText et){
@@ -327,6 +340,24 @@ public class SlidingLinearLayout extends CardView {
 
     public Status getCurrentStatus(){
         return this.mCurrentStatus;
+    }
+
+    private class SearchTextWatcher implements TextWatcher {
+        @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+        @Override public void afterTextChanged(Editable s) {}
+        @Override
+        public void onTextChanged(final CharSequence s, int start, int before, int count) {
+            if(s.toString().trim().isEmpty()){
+                return;
+            }
+            postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    List<Station> filteredStations = Line.getFilteredStations(s.toString());
+                    MBSUtils.log(TAG, "Filtered Stations: " + filteredStations);
+                }
+            }, 1000);
+        }
     }
 
 }
