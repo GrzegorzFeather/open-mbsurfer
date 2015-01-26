@@ -156,13 +156,18 @@ public class SlidingLinearLayout extends CardView {
         }
     }
 
-    private void setAsEditable(TextView tv, EditText et, EditableField field){
+    private void setAsEditable(TextView tv, final EditText et, EditableField field){
         tv.setVisibility(INVISIBLE);
         et.setVisibility(VISIBLE);
-        et.requestFocus();
-        InputMethodManager imm = (InputMethodManager) this.getContext()
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(et, InputMethodManager.SHOW_IMPLICIT);
+        this.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                et.requestFocus();
+                InputMethodManager imm = (InputMethodManager) getContext()
+                        .getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(et, InputMethodManager.SHOW_IMPLICIT);
+            }
+        }, 200);
         this.mCurrentSearch = field;
     }
 
