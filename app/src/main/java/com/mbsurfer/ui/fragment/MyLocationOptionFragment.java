@@ -72,13 +72,6 @@ public class MyLocationOptionFragment extends MenuOptionFragment
 
         this.mDirectionsLayout = (SlidingLinearLayout) this.mRootView.findViewById(R.id.layout_directions);
 
-        this.mRootView.findViewById(R.id.btn_close).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDirectionsLayout.close();
-            }
-        });
-
         return this.mRootView;
     }
 

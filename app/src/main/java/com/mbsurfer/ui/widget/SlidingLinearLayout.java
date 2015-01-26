@@ -103,6 +103,18 @@ public class SlidingLinearLayout extends CardView {
                 swapStations();
             }
         });
+        this.findViewById(R.id.btn_close).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                close();
+            }
+        });
+        this.findViewById(R.id.btn_down).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFirstLevel();
+            }
+        });
     }
 
     @Override
@@ -194,6 +206,9 @@ public class SlidingLinearLayout extends CardView {
         } else {
             ViewCompat.setTranslationY(this, this.mFirstLevelTranslation);
         }
+
+        this.findViewById(R.id.btn_close).setVisibility(VISIBLE);
+        this.findViewById(R.id.btn_down).setVisibility(GONE);
     }
 
     public void openFull(){
@@ -215,6 +230,9 @@ public class SlidingLinearLayout extends CardView {
         } else {
             ViewCompat.setTranslationY(this, 5f);
         }
+
+        this.findViewById(R.id.btn_close).setVisibility(GONE);
+        this.findViewById(R.id.btn_down).setVisibility(VISIBLE);
     }
 
     public void setFromStation(Station from){
@@ -279,12 +297,20 @@ public class SlidingLinearLayout extends CardView {
         this.setupDirections();
     }
 
-    public boolean isOpened(){
+    public boolean isOpen(){
         return this.mCurrentStatus.equals(Status.OPEN);
     }
 
     public boolean isClosed(){
         return this.mCurrentStatus.equals(Status.CLOSED);
+    }
+
+    public boolean isFirstLevel(){
+        return this.mCurrentStatus.equals(Status.FIRST_LEVEL);
+    }
+
+    public Status getCurrentStatus(){
+        return this.mCurrentStatus;
     }
 
 }
