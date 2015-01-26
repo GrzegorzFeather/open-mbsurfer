@@ -3,6 +3,7 @@ package com.mbsurfer.ui;
 import com.mbsurfer.R;
 import com.mbsurfer.app.MBSConfiguration;
 import com.mbsurfer.ui.fragment.HomeMenuFragment;
+import com.mbsurfer.ui.fragment.MenuOptionFragment;
 import com.mbsurfer.ui.widget.MBSToolbar;
 
 import android.os.Bundle;
@@ -151,10 +152,15 @@ public class HomeActivity extends HomeMenuFragment.MenuHostActivity implements T
 
     @Override
     public void onBackPressed() {
-        if(this.mMenuFragment == null || !this.mMenuFragment.isDrawerOpen()){
-            super.onBackPressed();
-        } else {
+        if(this.mMenuFragment != null && this.mMenuFragment.isDrawerOpen()){
             this.mMenuFragment.closeDrawer();
+        } else if(this.getCurrentVisibleContent() != null){
+            Fragment currentContent = this.getCurrentVisibleContent();
+            if(!((MenuOptionFragment) currentContent).onBackPressed()){
+                super.onBackPressed();
+            }
+        } else {
+            super.onBackPressed();
         }
     }
 
@@ -162,4 +168,10 @@ public class HomeActivity extends HomeMenuFragment.MenuHostActivity implements T
     public boolean onMenuItemClick(MenuItem menuItem) {
         return this.onOptionsItemSelected(menuItem);
     }
+
+    private Fragment getCurrentVisibleContent(){
+        FragmentManager fm = this.getSupportFragmentManager();
+        return fm.findFragmentById(R.id.container);
+    }
+
 }

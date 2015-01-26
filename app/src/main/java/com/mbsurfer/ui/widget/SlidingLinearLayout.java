@@ -25,8 +25,8 @@ public class SlidingLinearLayout extends CardView {
 
     private static final String TAG = SlidingLinearLayout.class.getSimpleName();
 
-    private enum Status {
-        OPEN, FIRST_LEVEL, CLOSED;
+    public enum Status {
+        OPEN_FULL, FIRST_LEVEL, CLOSED;
     }
 
     private static final Status defaultStatus = Status.CLOSED;
@@ -134,7 +134,7 @@ public class SlidingLinearLayout extends CardView {
                     MBSUtils.log(TAG, "onLayout - Will open first level");
                     this.openFirstLevel(false);
                     break;
-                case OPEN:
+                case OPEN_FULL:
                     MBSUtils.log(TAG, "onLayout - Will open full");
                     this.close(false);
                     break;
@@ -207,6 +207,8 @@ public class SlidingLinearLayout extends CardView {
             ViewCompat.setTranslationY(this, this.mFirstLevelTranslation);
         }
 
+        this.setAsLabel(this.mLblFrom, this.mEditFrom);
+        this.setAsLabel(this.mLblTo, this.mEditTo);
         this.findViewById(R.id.btn_close).setVisibility(VISIBLE);
         this.findViewById(R.id.btn_down).setVisibility(GONE);
     }
@@ -216,7 +218,7 @@ public class SlidingLinearLayout extends CardView {
     }
 
     private void openFull(boolean animate){
-        this.mCurrentStatus = Status.OPEN;
+        this.mCurrentStatus = Status.OPEN_FULL;
         if(animate){
             ViewCompat.animate(this)
                     .translationY(5f)
@@ -298,7 +300,7 @@ public class SlidingLinearLayout extends CardView {
     }
 
     public boolean isOpen(){
-        return this.mCurrentStatus.equals(Status.OPEN);
+        return this.mCurrentStatus.equals(Status.OPEN_FULL);
     }
 
     public boolean isClosed(){

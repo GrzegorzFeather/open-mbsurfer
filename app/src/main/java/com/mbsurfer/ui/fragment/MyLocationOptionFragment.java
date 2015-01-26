@@ -282,6 +282,20 @@ public class MyLocationOptionFragment extends MenuOptionFragment
         }
     }
 
+    @Override
+    public boolean onBackPressed() {
+        switch (this.mDirectionsLayout.getCurrentStatus()){
+            case FIRST_LEVEL:
+                this.mDirectionsLayout.close();
+                return true;
+            case OPEN_FULL:
+                this.mDirectionsLayout.openFirstLevel();
+                return true;
+            case CLOSED: default:
+                return super.onBackPressed();
+        }
+    }
+
     private class LinesInfoWindowManager implements GoogleMap.InfoWindowAdapter, GoogleMap.OnInfoWindowClickListener {
 
         private Context mContext;
