@@ -146,11 +146,13 @@ public class SlidingLinearLayout extends CardView {
         tv.setVisibility(INVISIBLE);
         et.setVisibility(VISIBLE);
         et.requestFocus();
+        et.requestFocus();
     }
 
     private void setAsLabel(TextView tv, EditText et){
         tv.setVisibility(VISIBLE);
         et.setVisibility(INVISIBLE);
+        et.setText("");
     }
 
     public void close(){
