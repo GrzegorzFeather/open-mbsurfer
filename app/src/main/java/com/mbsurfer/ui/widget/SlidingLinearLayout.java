@@ -13,6 +13,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -147,6 +148,9 @@ public class SlidingLinearLayout extends CardView {
         tv.setVisibility(INVISIBLE);
         et.setVisibility(VISIBLE);
         et.requestFocus();
+        InputMethodManager imm = (InputMethodManager) this.getContext()
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(et, InputMethodManager.SHOW_IMPLICIT);
     }
 
     private void setAsLabel(TextView tv, EditText et){
