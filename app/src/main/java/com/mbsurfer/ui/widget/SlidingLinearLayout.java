@@ -16,6 +16,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 /**
@@ -146,7 +147,6 @@ public class SlidingLinearLayout extends CardView {
         tv.setVisibility(INVISIBLE);
         et.setVisibility(VISIBLE);
         et.requestFocus();
-        et.requestFocus();
     }
 
     private void setAsLabel(TextView tv, EditText et){
@@ -244,6 +244,10 @@ public class SlidingLinearLayout extends CardView {
     }
 
     public void setFromStation(Station from, boolean animate) {
+        if(from == null || from.equals(this.mToStation)){
+            Toast.makeText(this.getContext(), "Already set as destination", Toast.LENGTH_SHORT).show();
+            return;
+        }
         this.mFromStation = from;
         this.setAsLabel(this.mLblFrom, this.mEditFrom);
         this.setupDirections();
@@ -255,6 +259,10 @@ public class SlidingLinearLayout extends CardView {
     }
 
     public void setToStation(Station to, boolean animate) {
+        if(to == null || to.equals(this.mFromStation)){
+            Toast.makeText(this.getContext(), "Already set as origin", Toast.LENGTH_SHORT).show();
+            return;
+        }
         this.mToStation = to;
         this.setAsLabel(this.mLblTo, this.mEditTo);
         this.setupDirections();
