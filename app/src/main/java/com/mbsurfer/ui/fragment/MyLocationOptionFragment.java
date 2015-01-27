@@ -65,6 +65,8 @@ public class MyLocationOptionFragment extends MenuOptionFragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        this.mIsFirstRecommendation = true;
+
         this.mRootView = inflater.inflate(R.layout.fragment_option_map, container, false);
 
         this.mMapView = (MapView) this.mRootView.findViewById(R.id.map);
@@ -175,6 +177,9 @@ public class MyLocationOptionFragment extends MenuOptionFragment
     public void onPause() {
         super.onPause();
         this.mMapView.onPause();
+        if(this.mMap != null){
+            this.mMap.setOnMyLocationChangeListener(null);
+        }
         this.getMenuHostActivity().removeOnDrawerSlideListener(this);
     }
 

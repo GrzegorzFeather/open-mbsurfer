@@ -142,7 +142,7 @@ public class SlidingLinearLayout extends CardView {
             switch (this.mCurrentStatus){
                 case CLOSED:
                     MBSUtils.log(TAG, "onLayout - Will close");
-                    this.openFull(false);
+                    this.close(false);
                     break;
                 case FIRST_LEVEL:
                     MBSUtils.log(TAG, "onLayout - Will open first level");
@@ -150,7 +150,7 @@ public class SlidingLinearLayout extends CardView {
                     break;
                 case OPEN_FULL:
                     MBSUtils.log(TAG, "onLayout - Will open full");
-                    this.close(false);
+                    this.openFull(false);
                     break;
             }
         }
