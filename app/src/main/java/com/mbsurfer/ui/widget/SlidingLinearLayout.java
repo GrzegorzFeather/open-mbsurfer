@@ -3,6 +3,7 @@ package com.mbsurfer.ui.widget;
 import com.mbsurfer.R;
 import com.mbsurfer.model.Line;
 import com.mbsurfer.model.Station;
+import com.mbsurfer.ui.adapter.SearchResultsAdapter;
 import com.mbsurfer.util.MBSUtils;
 
 import android.content.Context;
@@ -10,6 +11,8 @@ import android.os.Build;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorListener;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -22,13 +25,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.List;
-
 
 /**
  * Created by GrzegorzFeathers on 1/23/15.
  */
-public class SlidingLinearLayout extends CardView {
+public class SlidingLinearLayout extends CardView implements View.OnClickListener {
 
     private static final String TAG = SlidingLinearLayout.class.getSimpleName();
 
@@ -41,6 +42,10 @@ public class SlidingLinearLayout extends CardView {
     }
 
     private static final Status defaultStatus = Status.CLOSED;
+
+    private RecyclerView mRecyclerSearchResults;
+    private RecyclerView.Adapter mRecyclerSearchResultsAdapter;
+    private RecyclerView.LayoutManager mRecyclerSearchResultsManager;
 
     private Station mFromStation = null;
     private TextView mLblFrom;
@@ -56,6 +61,7 @@ public class SlidingLinearLayout extends CardView {
     private float mFirstLevelTranslation = 0f;
     private float mFullTranslation = 0f;
     private boolean mIsFirstCreation = true;
+
     private EditableField mCurrentSearch = EditableField.TO;
 
     public SlidingLinearLayout(Context context) {
@@ -71,9 +77,24 @@ public class SlidingLinearLayout extends CardView {
 
         LayoutInflater.from(context).inflate(R.layout.layout_directions, this, true);
 
+        this.mRecyclerSearchResults = (RecyclerView) this.findViewById(R.id.recycler_search_results);
+        this.mRecyclerSearchResults.setHasFixedSize(true);
+        this.mRecyclerSearchResultsAdapter = new SearchResultsAdapter(this);
+        this.mRecyclerSearchResultsManager = new LinearLayoutManager(context);
+        this.mRecyclerSearchResults.setAdapter(this.mRecyclerSearchResultsAdapter);
+        this.mRecyclerSearchResults.setLayoutManager(this.mRecyclerSearchResultsManager);
+        ((SearchResultsAdapter) this.mRecyclerSearchResultsAdapter).updateDataSet(Line.getFilteredStations(""));
+
         this.mLblFrom = (TextView) this.findViewById(R.id.lbl_from);
         this.mImageFrom = (ImageView) this.findViewById(R.id.img_from);
         this.mEditFrom = (EditText) this.findViewById(R.id.edit_from);
+        this.mLblFrom.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setAsEditable(mLblFrom, mEditFrom, EditableField.FROM);
+                openFull();
+            }
+        });
         this.mEditFrom.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -82,13 +103,7 @@ public class SlidingLinearLayout extends CardView {
                 }
             }
         });
-        this.mLblFrom.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setAsEditable(mLblFrom, mEditFrom, EditableField.FROM);
-                openFull();
-            }
-        });
+        this.mEditFrom.addTextChangedListener(new SearchTextWatcher());
 
         this.mLblTo = (TextView) this.findViewById(R.id.lbl_to);
         this.mImageTo = (ImageView) this.findViewById(R.id.img_to);
@@ -235,6 +250,9 @@ public class SlidingLinearLayout extends CardView {
         this.setAsLabel(this.mLblTo, this.mEditTo);
         this.findViewById(R.id.btn_close).setVisibility(VISIBLE);
         this.findViewById(R.id.btn_down).setVisibility(GONE);
+
+        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 
     public void openFull(){
@@ -347,6 +365,22 @@ public class SlidingLinearLayout extends CardView {
         return this.mCurrentStatus;
     }
 
+    @Override
+    public void onClick(View v) {
+        int position = this.mRecyclerSearchResults.getChildPosition(v);
+
+        switch (this.mCurrentSearch){
+            case FROM:
+                this.setFromStation(((SearchResultsAdapter) this.mRecyclerSearchResultsAdapter).getItem(position));
+                break;
+            case TO:
+                this.setToStation(((SearchResultsAdapter)this.mRecyclerSearchResultsAdapter).getItem(position));
+                break;
+        }
+
+        this.openFirstLevel();
+    }
+
     private class SearchTextWatcher implements TextWatcher {
         @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
         @Override public void afterTextChanged(Editable s) {}
@@ -355,13 +389,13 @@ public class SlidingLinearLayout extends CardView {
             if(s.toString().trim().isEmpty()){
                 return;
             }
-            postDelayed(new Runnable() {
+            post(new Runnable() {
                 @Override
                 public void run() {
-                    List<Station> filteredStations = Line.getFilteredStations(s.toString());
-                    MBSUtils.log(TAG, "Filtered Stations: " + filteredStations);
+                    ((SearchResultsAdapter) mRecyclerSearchResultsAdapter).updateDataSet(
+                            Line.getFilteredStations(s.toString()));
                 }
-            }, 1000);
+            });
         }
     }
 
