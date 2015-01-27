@@ -144,6 +144,13 @@ public class SlidingLinearLayout extends CardView implements View.OnClickListene
                 openFirstLevel();
             }
         });
+        this.findViewById(R.id.btn_travel).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFirstLevel();
+
+            }
+        });
     }
 
     @Override
@@ -184,6 +191,7 @@ public class SlidingLinearLayout extends CardView implements View.OnClickListene
             }
         }, 200);
         this.mCurrentSearch = field;
+        ((SearchResultsAdapter) this.mRecyclerSearchResultsAdapter).updateDataSet(Line.getFilteredStations(""));
     }
 
     private void setAsLabel(TextView tv, EditText et){
@@ -322,6 +330,12 @@ public class SlidingLinearLayout extends CardView implements View.OnClickListene
             this.mImageTo.setImageResource(this.mToStation.getIconId());
         } else {
             this.clearTo();
+        }
+
+        if(this.mFromStation != null && this.mToStation != null){
+            this.findViewById(R.id.btn_travel).setVisibility(VISIBLE);
+        } else {
+            this.findViewById(R.id.btn_travel).setVisibility(INVISIBLE);
         }
     }
 

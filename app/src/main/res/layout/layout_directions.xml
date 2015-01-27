@@ -17,13 +17,6 @@
 			android:layout_marginRight="1dp"
             android:orientation="horizontal">
 
-            <ImageButton android:id="@+id/btn_swap"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_swap"
-                android:background="@android:color/transparent"
-                android:layout_gravity="center_vertical"/>
-
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -119,26 +112,63 @@
 
             </LinearLayout>
 
-			<FrameLayout
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-				<ImageButton
-					android:id="@+id/btn_close"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:src="@drawable/ic_close"
-					android:background="@android:color/transparent"/>
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
 
-				<ImageButton
-					android:id="@+id/btn_down"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:src="@drawable/ic_down"
-					android:background="@android:color/transparent"
-					android:visibility="gone"/>
+                    <ImageButton
+                        android:id="@+id/btn_close"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_close"
+                        android:background="@android:color/transparent"/>
 
-			</FrameLayout>
+                    <ImageButton
+                        android:id="@+id/btn_down"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_down"
+                        android:background="@android:color/transparent"
+                        android:visibility="gone"/>
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+
+                    <ImageButton android:id="@+id/btn_swap"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_swap"
+                        android:background="@android:color/transparent"
+                        android:layout_gravity="center_vertical"/>
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+
+                    <ImageButton android:id="@+id/btn_travel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_travel"
+                        android:background="@android:color/transparent"
+                        android:layout_gravity="center_vertical"
+                        android:visibility="invisible"/>
+
+                </FrameLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 
